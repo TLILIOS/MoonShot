@@ -6,16 +6,32 @@
 //
 
 import SwiftUI
-
+struct User: Codable {
+    let name: String
+    let adress: Adress
+}
+struct Adress: Codable {
+    let street: String
+    let city: String
+}
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Button("Decode JSON") {
+            let input = """
+{
+"name": "Taylor Swift",
+"adress": {
+"street": "555, Taylor Swift Avenue",
+"city": "Nashville"
+}
+}
+"""
+            let data = Data(input.utf8)
+            let decoder = JSONDecoder()
+            if let user = try? decoder.decode(User.self, from: data) {
+                print(user.adress.street)
+            }
         }
-        .padding()
     }
 }
 
